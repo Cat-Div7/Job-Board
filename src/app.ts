@@ -17,6 +17,6 @@ export async function initApp() {
 
   const jobs = await fetchJobs();
   if (jobsContainer) {
-    jobsContainer.innerHTML = jobsContainer.innerHTML = renderJobs(jobs);
+    jobsContainer.innerHTML = `<div class="columns is-multiline">${renderJobs(jobs)}</div>`;
   }
 }
