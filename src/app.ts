@@ -8,15 +8,17 @@ export async function initApp() {
   if (!app) return;
 
   app.innerHTML = `
-  <h1>HireFlow</h1>
-  <div id="jobs"></div>
-  `;
+  <div class="max-w-6xl mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">HireFlow</h1>
+    <div id="jobs" class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"></div>
+  </div>
+`;
 
   // Fetch and render jobs
   const jobsContainer = document.querySelector<HTMLDivElement>("#jobs");
 
   const jobs = await fetchJobs();
   if (jobsContainer) {
-    jobsContainer.innerHTML = `<div class="columns is-multiline">${renderJobs(jobs)}</div>`;
+    jobsContainer.innerHTML = renderJobs(jobs);
   }
 }
