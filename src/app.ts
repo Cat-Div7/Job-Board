@@ -1,3 +1,4 @@
+import { attachJobEvents } from "./render/jobEvents";
 import { renderJobs } from "./render/renderJobs";
 import { fetchJobs } from "./services/jobService";
 
@@ -15,5 +16,6 @@ export async function initApp(app: HTMLDivElement) {
   const jobs = await fetchJobs();
   if (jobsContainer) {
     jobsContainer.innerHTML = renderJobs(jobs);
+    attachJobEvents(jobsContainer)
   }
 }

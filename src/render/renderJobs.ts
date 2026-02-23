@@ -19,8 +19,21 @@ export function renderJobs(jobs: Job[]): string {
             ).toLocaleDateString()}</em></p>
           </div>
           <footer class="flex border-t">
-            <a href="#" class="flex-1 text-center py-2 hover:bg-gray-100 border-r">Apply</a>
-            <a href="#" class="flex-1 text-center py-2 hover:bg-gray-100">Save</a>
+            <a
+            data-action="apply"
+            data-id="${job.id}"
+            class="flex-1 text-center py-2 hover:bg-gray-100 border-r"
+            >
+              Apply
+            </a>
+
+            <a
+            data-action="save"
+            data-id="${job.id}"
+            class="flex-1 text-center py-2 hover:bg-gray-100"
+            >
+              Save
+            </a>
           </footer>
         </div>
       </div>
