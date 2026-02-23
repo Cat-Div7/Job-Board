@@ -1,4 +1,6 @@
 import { initApp } from "./app.ts";
 import "./style.css";
 
-initApp();
+const app = document.querySelector<HTMLDivElement>("#app");
+
+if (app) initApp(app);
