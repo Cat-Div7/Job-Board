@@ -2,6 +2,7 @@ import { attachJobEvents } from "./render/jobEvents";
 import { renderJobs } from "./render/renderJobs";
 import { fetchJobs } from "./services/jobService";
 import { setState, subscribe, getState } from "./state";
+import { registerRoute, resolveRoute } from "./router";
 
 export async function initApp(app: HTMLDivElement) {
   app.innerHTML = `
@@ -10,22 +11,26 @@ export async function initApp(app: HTMLDivElement) {
         HireFlow
       </h1>
 
-      <div
-        id="jobs"
-        class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"
-      ></div>
+      <div id="view"></div>
     </div>
   `;
 
-  const jobsContainer = document.querySelector<HTMLDivElement>("#jobs");
+  const view = document.querySelector<HTMLDivElement>("#view");
 
-  if (!jobsContainer) return;
+  if (!view) return;
 
-  attachJobEvents(jobsContainer);
+  attachJobEvents(view);
 
-  subscribe(() => {
+  registerRoute("/", () => {
     const { jobs } = getState();
-    jobsContainer.innerHTML = renderJobs(jobs);
+
+    view.innerHTML = `
+    <div
+      class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"
+    >
+      ${renderJobs(jobs)}
+    </div>
+  `;
   });
 
   const jobs = await fetchJobs();
@@ -33,4 +38,6 @@ export async function initApp(app: HTMLDivElement) {
   setState((state) => {
     state.jobs = jobs;
   });
+
+  resolveRoute();
 }
