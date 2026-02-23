@@ -1,9 +1,11 @@
 import type { Job } from "../@types/job";
+import { getState } from "../state";
 
 export function renderJobs(jobs: Job[]): string {
   return jobs
-    .map(
-      (job) => `
+    .map((job) => {
+      const saved = getState().savedJobs.has(job.id);
+      return `
       <div class="w-full p-2">
         <div class="bg-white shadow-md rounded-lg overflow-hidden" id="${job.id}">
           <header class="px-4 py-2 border-b">
@@ -30,14 +32,16 @@ export function renderJobs(jobs: Job[]): string {
             <a
             data-action="save"
             data-id="${job.id}"
-            class="flex-1 text-center py-2 hover:bg-gray-100"
+            class="flex-1 text-center py-2 ${
+              saved ? "bg-blue-100" : "hover:bg-gray-100"
+            }"
             >
-              Save
+            ${saved ? "Saved" : "Save"}
             </a>
           </footer>
         </div>
       </div>
-    `,
-    )
+    `;
+    })
     .join("");
 }
