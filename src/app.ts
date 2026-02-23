@@ -20,6 +20,9 @@ export async function initApp(app: HTMLDivElement) {
   if (!view) return;
 
   attachJobEvents(view);
+  subscribe(() => {
+    resolveRoute();
+  });
 
   registerRoute("/", () => {
     const { jobs } = getState();
