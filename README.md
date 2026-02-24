@@ -71,6 +71,12 @@ Saved jobs page
 
 ---
 
+## System Design
+
+[![System Design](./docs/system-design.svg)](./docs/system-design.svg)
+
+---
+
 ## Tech Stack
 
 - **TypeScript** — strictly typed, no frameworks
