@@ -1,11 +1,13 @@
 @import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 }
 
-/* App Layout */
 body {
   font-family:
     system-ui,
@@ -14,8 +16,5 @@ body {
     "Segoe UI",
     Roboto,
     sans-serif;
-  background-color: #f9fafb;
   margin: 0;
-  padding: 40px;
-  color: #111827;
 }
