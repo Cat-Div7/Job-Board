@@ -2,7 +2,8 @@ import { attachJobEvents } from "./render/jobEvents";
 import { renderJobs } from "./render/renderJobs";
 import { fetchJobs } from "./services/jobService";
 import { setState, subscribe, getState } from "./state";
-import { registerRoute, resolveRoute } from "./router";
+import { initRouter, registerRoute, resolveRoute } from "./router";
+import { renderJobDetails } from "./render/renderJobDetail";
 
 export async function initApp(app: HTMLDivElement) {
   app.innerHTML = `
@@ -24,6 +25,7 @@ export async function initApp(app: HTMLDivElement) {
     resolveRoute();
   });
 
+  // Home Route (Jobs displayer)
   registerRoute("/", () => {
     const { jobs } = getState();
 
@@ -36,6 +38,22 @@ export async function initApp(app: HTMLDivElement) {
   `;
   });
 
+  // Job Details Route
+  registerRoute("/job/:id", (params) => {
+    const { jobs } = getState();
+
+    const job = jobs.find((j) => j.id === params?.id);
+
+    if (!job) {
+      view.innerHTML = "<h2>Job not found</h2>";
+
+      return;
+    }
+
+    view.innerHTML = renderJobDetails(job);
+  });
+
+  // Fetch Jobs data
   const jobs = await fetchJobs();
 
   setState((state) => {
@@ -43,4 +61,5 @@ export async function initApp(app: HTMLDivElement) {
   });
 
   resolveRoute();
+  initRouter();
 }
