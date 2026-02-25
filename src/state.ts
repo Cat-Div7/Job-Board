@@ -9,6 +9,7 @@ type AppState = {
   error: string | null;
 
   search: string;
+  appliedJobs: Set<string>;
 };
 
 const state: AppState = {
@@ -20,6 +21,7 @@ const state: AppState = {
   error: null,
 
   search: "",
+  appliedJobs: new Set(),
 };
 
 const listeners = new Set<() => void>();

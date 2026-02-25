@@ -1,5 +1,6 @@
 import { setState } from "../state";
 import { showToast } from "../utils/toast";
+import { renderApplyModal } from "./renderApplyModal";
 
 export function attachJobEvents(container: HTMLElement): void {
   container.addEventListener("click", (e: MouseEvent) => {
@@ -13,6 +14,7 @@ export function attachJobEvents(container: HTMLElement): void {
 
     if (action === "apply") {
       console.log("Apply job:", id);
+      document.body.insertAdjacentHTML("beforeend", renderApplyModal(id));
     }
 
     if (action === "save") {

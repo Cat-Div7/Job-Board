@@ -13,6 +13,7 @@ import { renderJobDetails } from "./render/renderJobDetail";
 import { getFilteredJobs, getSavedJobs } from "./state/selectors";
 import { renderLoading } from "./render/renderLoading";
 import { renderError } from "./render/renderError";
+import { attachApplyEvents } from "./render/applyEvents";
 
 export async function initApp(app: HTMLDivElement) {
   // Apply persisted dark mode before any paint — prevents flash
@@ -88,6 +89,7 @@ export async function initApp(app: HTMLDivElement) {
     });
 
   attachJobEvents(view);
+  attachApplyEvents(document.body);
 
   subscribe(() => {
     resolveRoute();
