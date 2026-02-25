@@ -10,10 +10,11 @@ import {
 } from "./state";
 import { initRouter, registerRoute, resolveRoute } from "./router";
 import { renderJobDetails } from "./render/renderJobDetail";
-import { getFilteredJobs, getSavedJobs } from "./state/selectors";
+import { getAppliedJobs, getFilteredJobs, getSavedJobs } from "./state/selectors";
 import { renderLoading } from "./render/renderLoading";
 import { renderError } from "./render/renderError";
 import { attachApplyEvents } from "./render/applyEvents";
+import { renderEmpty } from "./render/renderEmpty";
 
 export async function initApp(app: HTMLDivElement) {
   // Apply persisted dark mode before any paint — prevents flash
@@ -27,9 +28,16 @@ export async function initApp(app: HTMLDivElement) {
             HireFlow
           </a>
           <div class="flex gap-4 items-center">
+          <a href="/" data-link class="hover:underline">
+            Home
+          </a>
             <a href="/saved" data-link class="hover:underline dark:text-gray-300">
               Saved Jobs
             </a>
+            <a href="/applied" data-link class="hover:underline">
+              Applied
+            </a>
+
             <button
               id="dark-mode-toggle"
               class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white transition-colors text-sm font-medium"
@@ -143,13 +151,36 @@ export async function initApp(app: HTMLDivElement) {
     }
 
     view.innerHTML = `
-    <div
-      class="grid gap-4
-      grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"
-    >
-      ${renderJobs(saved)}
-    </div>
-  `;
+      <div
+        class="grid gap-4
+        grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"
+      >
+        ${renderJobs(saved)}
+      </div>
+    `;
+  });
+
+  // Applied Jobs Route
+  registerRoute("/applied", () => {
+    const jobs = getAppliedJobs();
+
+    if (!jobs.length) {
+      view.innerHTML = renderEmpty("You haven't applied to any jobs yet.");
+      return;
+    }
+
+    view.innerHTML = `
+      <h2 class="text-2xl font-bold mb-4">
+        Applied Jobs
+      </h2>
+
+      <div
+        class="grid gap-4
+        grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"
+      >
+        ${renderJobs(jobs)}
+      </div>
+    `;
   });
 
   // Set loading state before fetching jobs
