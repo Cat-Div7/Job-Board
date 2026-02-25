@@ -1,9 +1,16 @@
 import { attachJobEvents } from "./render/jobEvents";
 import { renderJobs } from "./render/renderJobs";
 import { fetchJobs } from "./services/jobService";
-import { setState, subscribe, getState, toggleDarkMode, applyDarkMode } from "./state";
+import {
+  setState,
+  subscribe,
+  getState,
+  toggleDarkMode,
+  applyDarkMode,
+} from "./state";
 import { initRouter, registerRoute, resolveRoute } from "./router";
 import { renderJobDetails } from "./render/renderJobDetail";
+import { getSavedJobs } from "./state/selectors";
 
 export async function initApp(app: HTMLDivElement) {
   // Apply persisted dark mode before any paint — prevents flash
@@ -12,17 +19,24 @@ export async function initApp(app: HTMLDivElement) {
   app.innerHTML = `
     <div class="min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-colors duration-200">
       <div class="max-w-6xl mx-auto p-4">
-        <header class="flex items-center justify-between mb-6">
-          <h1 class="text-3xl font-bold">HireFlow</h1>
-          <button
-            id="dark-mode-toggle"
-            class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white transition-colors text-sm font-medium"
-            aria-label="Toggle dark mode"
-          >
-            <span id="dark-mode-icon"></span>
-            <span id="dark-mode-label" class="ml-1"></span>
-          </button>
-        </header>
+        <nav class="flex justify-between items-center mb-6">
+          <a href="/" data-link class="text-2xl font-bold dark:text-white">
+            HireFlow
+          </a>
+          <div class="flex gap-4 items-center">
+            <a href="/saved" data-link class="hover:underline dark:text-gray-300">
+              Saved Jobs
+            </a>
+            <button
+              id="dark-mode-toggle"
+              class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white transition-colors text-sm font-medium"
+              aria-label="Toggle dark mode"
+            >
+              <span id="dark-mode-icon"></span>
+              <span id="dark-mode-label"></span>
+            </button>
+          </div>
+        </nav>
 
         <div id="view"></div>
       </div>
@@ -76,6 +90,29 @@ export async function initApp(app: HTMLDivElement) {
     }
 
     view.innerHTML = renderJobDetails(job);
+  });
+
+  // Svaved Jobs Route
+  registerRoute("/saved", () => {
+    const saved = getSavedJobs();
+
+    if (!saved.length) {
+      view.innerHTML = `
+      <p class="text-center text-gray-500">
+        No saved jobs yet
+      </p>
+    `;
+      return;
+    }
+
+    view.innerHTML = `
+    <div
+      class="grid gap-4
+      grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]"
+    >
+      ${renderJobs(saved)}
+    </div>
+  `;
   });
 
   const jobs = await fetchJobs();
