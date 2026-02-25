@@ -47,6 +47,11 @@ export async function initApp(app: HTMLDivElement) {
           class="w-full mb-6 px-4 py-2 border rounded"
         />
 
+        <div
+          id="toast-container"
+          class="fixed top-4 right-4 space-y-2 z-50"
+        ></div>
+
         <div id="view"></div>
       </div>
     </div>

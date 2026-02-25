@@ -1,4 +1,5 @@
 import { setState } from "../state";
+import { showToast } from "../utils/toast";
 
 export function attachJobEvents(container: HTMLElement): void {
   container.addEventListener("click", (e: MouseEvent) => {
@@ -18,8 +19,10 @@ export function attachJobEvents(container: HTMLElement): void {
       setState((state) => {
         if (state.savedJobs.has(id)) {
           state.savedJobs.delete(id);
+          showToast("Removed from saved jobs");
         } else {
           state.savedJobs.add(id);
+          showToast("Job saved");
         }
       });
     }
