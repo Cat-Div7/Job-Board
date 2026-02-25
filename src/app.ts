@@ -15,7 +15,6 @@ import {
   getFilteredJobs,
   getSavedJobs,
 } from "./state/selectors";
-import { renderLoading } from "./render/renderLoading";
 import { renderError } from "./render/renderError";
 import { attachApplyEvents } from "./render/applyEvents";
 import { renderEmpty } from "./render/renderEmpty";
@@ -198,6 +197,7 @@ export async function initApp(app: HTMLDivElement) {
     state.error = null;
   });
 
+  // Fetch jobs and update state
   try {
     const jobs = await fetchJobs();
 
@@ -212,6 +212,33 @@ export async function initApp(app: HTMLDivElement) {
     });
   }
 
+  // Retry fetching jobs on error
+  view.addEventListener("click", async (e) => {
+    const target = e.target as HTMLElement;
+
+    if (!target.closest("[data-retry]")) return;
+
+    setState((state) => {
+      state.loading = true;
+      state.error = null;
+    });
+
+    try {
+      const jobs = await fetchJobs();
+
+      setState((state) => {
+        state.jobs = jobs;
+        state.loading = false;
+      });
+    } catch {
+      setState((state) => {
+        state.loading = false;
+        state.error = "Failed to fetch jobs";
+      });
+    }
+  });
+
+  // Initialize router and render initial route
   resolveRoute();
   initRouter();
 }
