@@ -10,7 +10,7 @@ import {
 } from "./state";
 import { initRouter, registerRoute, resolveRoute } from "./router";
 import { renderJobDetails } from "./render/renderJobDetail";
-import { getSavedJobs } from "./state/selectors";
+import { getFilteredJobs, getSavedJobs } from "./state/selectors";
 import { renderLoading } from "./render/renderLoading";
 import { renderError } from "./render/renderError";
 
@@ -40,6 +40,13 @@ export async function initApp(app: HTMLDivElement) {
           </div>
         </nav>
 
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search jobs..."
+          class="w-full mb-6 px-4 py-2 border rounded"
+        />
+
         <div id="view"></div>
       </div>
     </div>
@@ -65,6 +72,16 @@ export async function initApp(app: HTMLDivElement) {
       updateToggleUI();
     });
 
+  document
+    .querySelector<HTMLInputElement>("#search-input")
+    ?.addEventListener("input", (e) => {
+      const { value } = e.target as HTMLInputElement;
+
+      setState((state) => {
+        state.search = value;
+      });
+    });
+
   attachJobEvents(view);
 
   subscribe(() => {
@@ -73,7 +90,8 @@ export async function initApp(app: HTMLDivElement) {
 
   // Home Route
   registerRoute("/", () => {
-    const { jobs, loading, error } = getState();
+    const jobs = getFilteredJobs();
+    const { loading, error } = getState();
 
     if (loading) {
       view.innerHTML = renderLoading();

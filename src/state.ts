@@ -7,6 +7,8 @@ type AppState = {
 
   loading: boolean;
   error: string | null;
+
+  search: string;
 };
 
 const state: AppState = {
@@ -16,6 +18,8 @@ const state: AppState = {
 
   loading: false,
   error: null,
+
+  search: "",
 };
 
 const listeners = new Set<() => void>();
