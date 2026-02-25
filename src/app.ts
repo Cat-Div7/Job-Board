@@ -10,11 +10,16 @@ import {
 } from "./state";
 import { initRouter, registerRoute, resolveRoute } from "./router";
 import { renderJobDetails } from "./render/renderJobDetail";
-import { getAppliedJobs, getFilteredJobs, getSavedJobs } from "./state/selectors";
+import {
+  getAppliedJobs,
+  getFilteredJobs,
+  getSavedJobs,
+} from "./state/selectors";
 import { renderLoading } from "./render/renderLoading";
 import { renderError } from "./render/renderError";
 import { attachApplyEvents } from "./render/applyEvents";
 import { renderEmpty } from "./render/renderEmpty";
+import { renderSkeleton } from "./render/renderSkeleton";
 
 export async function initApp(app: HTMLDivElement) {
   // Apply persisted dark mode before any paint — prevents flash
@@ -109,7 +114,11 @@ export async function initApp(app: HTMLDivElement) {
     const { loading, error } = getState();
 
     if (loading) {
-      view.innerHTML = renderLoading();
+      view.innerHTML = `
+        <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]">
+          ${renderSkeleton()}
+        </div>
+      `;
       return;
     }
 
