@@ -30,7 +30,7 @@ npm install
 ```bash
 npm run dev
 ```
-> **Note:** This project currently uses mock data — no real API is connected.
+> **Note:** This project currently uses mock data — No real API is connected.
 
 ---
 
