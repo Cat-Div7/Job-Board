@@ -13,7 +13,7 @@ type AppState = {
 
 const state: AppState = {
   jobs: [],
-  savedJobs: new Set(),
+  savedJobs: new Set(JSON.parse(localStorage.getItem("savedJobs") || "[]")),
   darkMode: localStorage.getItem("darkMode") === "true",
 
   loading: false,
@@ -30,6 +30,7 @@ export function getState() {
 
 export function setState(updater: (state: AppState) => void) {
   updater(state);
+  persistSavedJobs(state.savedJobs);
   listeners.forEach((l) => l());
 }
 
@@ -51,4 +52,8 @@ export function toggleDarkMode() {
   localStorage.setItem("darkMode", String(state.darkMode));
   applyDarkMode();
   listeners.forEach((l) => l());
+}
+
+function persistSavedJobs(savedJobs: Set<string>) {
+  localStorage.setItem("savedJobs", JSON.stringify([...savedJobs]));
 }
