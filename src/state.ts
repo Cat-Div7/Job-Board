@@ -4,12 +4,18 @@ type AppState = {
   jobs: Job[];
   savedJobs: Set<string>;
   darkMode: boolean;
+
+  loading: boolean;
+  error: string | null;
 };
 
 const state: AppState = {
   jobs: [],
   savedJobs: new Set(),
   darkMode: localStorage.getItem("darkMode") === "true",
+
+  loading: false,
+  error: null,
 };
 
 const listeners = new Set<() => void>();

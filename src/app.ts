@@ -11,6 +11,8 @@ import {
 import { initRouter, registerRoute, resolveRoute } from "./router";
 import { renderJobDetails } from "./render/renderJobDetail";
 import { getSavedJobs } from "./state/selectors";
+import { renderLoading } from "./render/renderLoading";
+import { renderError } from "./render/renderError";
 
 export async function initApp(app: HTMLDivElement) {
   // Apply persisted dark mode before any paint — prevents flash
@@ -71,7 +73,17 @@ export async function initApp(app: HTMLDivElement) {
 
   // Home Route
   registerRoute("/", () => {
-    const { jobs } = getState();
+    const { jobs, loading, error } = getState();
+
+    if (loading) {
+      view.innerHTML = renderLoading();
+      return;
+    }
+
+    if (error) {
+      view.innerHTML = renderError(error);
+      return;
+    }
     view.innerHTML = `
       <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(350px,min(100%,1fr)))]">
         ${renderJobs(jobs)}
@@ -115,10 +127,25 @@ export async function initApp(app: HTMLDivElement) {
   `;
   });
 
-  const jobs = await fetchJobs();
+  // Set loading state before fetching jobs
   setState((state) => {
-    state.jobs = jobs;
+    state.loading = true;
+    state.error = null;
   });
+
+  try {
+    const jobs = await fetchJobs();
+
+    setState((state) => {
+      state.jobs = jobs;
+      state.loading = false;
+    });
+  } catch (err) {
+    setState((state) => {
+      state.loading = false;
+      state.error = err instanceof Error ? err.message : "Unknown error";
+    });
+  }
 
   resolveRoute();
   initRouter();
