@@ -5,6 +5,80 @@
 
 ---
 
+## Getting Started
+
+### Clone the repository
+
+**HTTPS:**
+```bash
+git clone https://github.com/Cat-Div7/Job-Board.git
+```
+
+**SSH:**
+```bash
+git clone git@github.com:Cat-Div7/Job-Board.git
+```
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Start the development server
+
+```bash
+npm run dev
+```
+> **Note:** This project currently uses mock data — no real API is connected.
+
+---
+
+## Project Structure
+
+```
+├── docs
+│   ├── system-design.excalidraw
+│   └── system-design.svg
+├── src
+│   ├── @types
+│   │   └── job.ts
+│   ├── data
+│   │   └── mockJobs.ts
+│   ├── render
+│   │   ├── applyEvents.ts
+│   │   ├── jobEvents.ts
+│   │   ├── renderApplyModal.ts
+│   │   ├── renderEmpty.ts
+│   │   ├── renderError.ts
+│   │   ├── renderJobDetail.ts
+│   │   ├── renderJobs.ts
+│   │   ├── renderLoading.ts
+│   │   └── renderSkeleton.ts
+│   ├── services
+│   │   └── jobService.ts
+│   ├── state
+│   │   └── selectors.ts
+│   ├── utils
+│   │   └── toast.ts
+│   ├── app.ts
+│   ├── main.ts
+│   ├── router.ts
+│   ├── state.ts
+│   └── style.css
+├── .gitignore
+├── .prettierrc
+├── README.md
+├── index.html
+├── package-lock.json
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+└── vite.config.ts
+```
+
+---
+
 ## Features
 
 ### Core
@@ -19,6 +93,7 @@
 - Loading state
 - Error state
 - Empty state
+- Dark mode toggle with persistence
 
 ---
 
@@ -29,6 +104,7 @@
 | Home | Browse, search, and filter all available jobs |
 | Job Details | View full job description and save the job |
 | Saved Jobs | View all locally saved jobs |
+| Applied Jobs | View all locally Applied jobs |
 
 ---
 
@@ -81,9 +157,10 @@ Saved jobs page
 
 - **TypeScript** — strictly typed, no frameworks
 - **Vanilla JS** — no React, no Vue
-- **HTML/CSS** — custom styling
+- **Tailwind CSS v4** — utility-first styling with dark mode
 - **ES Modules** — native browser module system
 - **localStorage** — job persistence
+- **Vite** — lightning-fast dev server and bundler
 
 ---
 
